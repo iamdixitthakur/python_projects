@@ -1,0 +1,53 @@
+import PyPDF2
+import os 
+import glob
+
+code_directory=os.getcwd()
+os.chdir("../")
+search_directory="input"
+matching_directory=glob.glob(f"*{search_directory}",recursive=True)
+if matching_directory:
+    current_directory=matching_directory[0]
+    os.chdir(current_directory)
+else:
+    print(f"No directory named '{search_directory}' found.")
+
+files = [os.path.basename(f) for f in glob.glob(f"{os.getcwd()}/*")]
+for x in files:
+    if(x!="wtr.pdf"):
+        print(x)
+
+pdf_to_modify=input("enter the pdf name on which you want to add watermark :")
+orignal = PyPDF2.PdfReader(open(f'{pdf_to_modify}.pdf', 'rb'))
+watermark = PyPDF2.PdfReader(open('wtr.pdf', 'rb'))
+output = PyPDF2.PdfWriter()
+
+for i in range(len(orignal.pages)):
+    page = orignal.pages[i]
+    page.merge_page(watermark.pages[0])
+    output.add_page(page)
+ 
+os.chdir("../")
+print(os.getcwd())
+search_directory="output"
+matching_directory=glob.glob(f"*{search_directory}",recursive=True)
+if matching_directory:
+    current_directory=matching_directory[0]
+    os.chdir(current_directory)
+else:
+    print(f"No directory named '{search_directory}' found.")
+
+with open('watermaked_output.pdf', 'wb') as outputFile:
+    output.write(outputFile)
+    
+
+ 
+
+
+ 
+ 
+
+ 
+
+
+ 
